@@ -7,16 +7,62 @@ $( function() {
 		audio.play();
 	}
 	
+	function pickRandomProperty(obj) {
+		// Pick a random key from an object
+	    var result;
+	    var count = 0;
+	    for (var prop in obj)
+	        if (Math.random() < 1/++count)
+	           result = prop;
+	    return result;
+	}
+	
 	function maketexteffects(title) {
-		// Set the text effetcs on a JQ selector named title then show it
+		// Set the text effects on a JQ selector named title then show it
 		titlearea.text(title);
 		var font = getrandomfont();
 		var color = getrandomcolor();
-		titlearea.css({
+		var css = {
+			'font-size': '60pt',
 			'font-family': font,
-			'letter-spacing': '0',
 			'color':color
-		})
+		}
+		
+		var effects = {
+			glow: function() {
+				// Add a glow
+				css['text-shadow'] = '0 0 30px '+color+', 0 0 70px '+color
+			},
+			texture: function() {
+				// Add a texture to the text
+				css['background'] = 'url(/static/img/paint.png) repeat, white'
+				css['-webkit-text-fill-color'] = 'transparent'
+				css['-webkit-background-clip'] = 'text'
+			},
+			textoutline: function() {
+				// Add an outline to the text 
+				css['-webkit-text-stroke'] = '1px '+color;
+				css['-webkit-text-fill-color'] = 'transparent';
+			},
+			border: function () {
+				// Add a border
+				css['border-top'] = '1px solid '+color
+				css['border-bottom'] = '1px solid '+color
+			},
+			rotate: function () {
+				// Rotate a little
+				css['-webkit-transform'] = 'rotate(-3deg)'
+			}
+		};
+		
+		effect_to_apply = pickRandomProperty(effects)	
+		effects[effect_to_apply]()
+		// For individual letters
+		// Adjust colors 
+		// Adjust sizes
+			
+		// effects.rotate()
+		titlearea.css(css)
 	}
 
 	function showcredits(titles, fonts, interval) {
@@ -61,7 +107,7 @@ $( function() {
         "aesthetic",
         "sustainable. Leggings",
         "iphone",
-        "put a bird on it ,retro",
+        "put a bird on it",
         "wayfarers",
         "cliche",
         "marfa",
@@ -128,6 +174,7 @@ $( function() {
 		'dildopurple':'#320850',
 		'orange':'#de5423'
 	}
+	var GOLDENRATIO = 1.618;
 	var colors = [];
 	for ( colorname in colortable) {
 		colors.push(colortable[colorname])
@@ -137,15 +184,13 @@ $( function() {
 	
 	var getrandomfont = function() {return fonts[Math.floor ( Math.random() * fontslength )] };
 	var getrandomcolor = function() {return colors[Math.floor ( Math.random() * colorslength )] }; 
-	// var size = 
-	
 
 	addmusic();
 	
-	var bpm = 140;
+	var BPM = 135;
 	
-	var interval = 60 / bpm * 1000;
+	var interval = 60 / BPM * 1000;
 		
-	showcredits(titles, fonts, bpm);
+	showcredits(titles, fonts, interval);
 })
 
