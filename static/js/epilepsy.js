@@ -17,6 +17,26 @@ $( function() {
 	    return result;
 	}
 	
+	function vary_around_zero(variance) {
+		// Return a random number in the range of +-variance
+		return Math.floor( Math.random() * (variance*2) ) - variance; 
+	}
+	
+	function lighten_or_darken_color(hsl_color, amount) {
+		// Lighten or darken hex color by amount (in int)
+		bits = hsl_color.split(',')
+		hue = bits[0]
+		saturation = bits[1]
+		lightness = parseFloat(bits[2])
+		lightness += amount;
+		lightness == lightness || 1
+		lightness = lightness+'%'
+		newcolor = [hue, saturation, lightness].join(',')
+		console.log('newcolor:');
+		console.log(newcolor);
+	    return newcolor;
+	}
+	
 	function maketexteffects(title) {
 		// Set the text effects on a JQ selector named title then show it
 		var font = getrandomfont();
@@ -24,13 +44,16 @@ $( function() {
 		var css = {
 			'font-size': '120pt',
 			'font-family': font,
-			'color':color
+			'color':'hsl('+color+')',
+			'text-align':'center',
 		}
-		
+		css['margin-left'] = vary_around_zero(200);
+		css['margin-top'] = vary_around_zero(200);
 		var effects = {
 			glow: function() {
 				// Add a glow
-				css['text-shadow'] = '0 0 30px '+color+', 0 0 70px '+color
+				glowcolor = lighten_or_darken_color(color, -5);
+				css['text-shadow'] = '0 0 30px hsl('+glowcolor+'), 0 0 70px hsl('+glowcolor+')'
 			},
 			texture: function() {
 				// Add a texture to the text
@@ -38,16 +61,36 @@ $( function() {
 				css['-webkit-text-fill-color'] = 'transparent'
 				css['-webkit-background-clip'] = 'text'
 			},
+			bounce: function() {
+				// Bounce the text multiple times
+				var shadows = []
+				var current = 1
+				var max = 40
+				var shadowcolor = color;
+				while ( current < max ) {
+					shadowcolor = lighten_or_darken_color(shadowcolor, -5);
+					shadows.push(current+'px '+current+'px hsl('+shadowcolor+')');
+					current += 5;
+				}
+				css['text-shadow'] = shadows.join(', ');
+				console.log('shadow');
+				console.log(css['text-shadow']);
+			},	
 			textoutline: function() {
 				// Add an outline to the text 
-				css['-webkit-text-stroke'] = '1px '+color;
+				css['-webkit-text-stroke'] = '1px hsl('+color+')';
 				css['-webkit-text-fill-color'] = 'transparent';
+			},
+			bordertopbottom: function () {
+				// Add a border
+				css['border-top'] = '1px solid hsl('+color+')';
+				css['border-bottom'] = '1px solid hsl('+color+')';
 			},
 			border: function () {
 				// Add a border
-				css['border-top'] = '1px solid '+color
-				css['border-bottom'] = '1px solid '+color
+				css['border'] = '1px solid hsl('+color+')'
 			},
+			
 			rotate: function () {
 				// Rotate a little
 				css['-webkit-transform'] = 'rotate(-3deg)'
@@ -149,8 +192,29 @@ $( function() {
         "brooklyn",
         "wes anderson",
         "cardigan ",
-		"american apparel."
+		"american apparel.",
+		"etsy",
+	    "vice",
+	    "wayfarers.",
+	    "odio",
+	    "aliquip",
+	    "art party",
+	    "echo park",
+	    "brunch",
+	    "gluten-free",
+	    "quinoa",
+	    "freegan",
+	    "messenger bag",
+	    "Tumblr",
+	    "jean shorts",
+	    "bicycle rights",
+	    "readymade",
+	    "pitchfork",
+	    "retro,",
+	    "artisan",
+	    "hoodie"
 	];
+
 	var fonts = [
 	    'BallparkWeiner',
 	    'AirstreamRegular',
@@ -167,17 +231,17 @@ $( function() {
 	];
 	var fontslength = fonts.length;
 	var colortable = {
-		'etvred':'#6d0111',
-		'etvyellow':'#d07a2d',
-		'darkgreen':'#286e28',
-		'purple':'#4b1759',
-		'sexypink':'#d3969e',
-		'pink':'#cc0082',
-		'green':'#00a701',
-		'blue':'#0000e1',
-		'neonaqua':'#1fffff',
-		'dildopurple':'#320850',
-		'orange':'#de5423'
+		'etvred':'351, 98%, 22',
+		'etvyellow':'28, 64%, 50%',
+		'darkgreen':'120, 47%, 29%',
+		'purple':'287, 59%, 22%',
+		'sexypink':'352, 41%, 71%',
+		'pink':'322, 100%, 40%',
+		'green':'120, 100%, 33%',
+		'blue':'240, 100%, 44%',
+		'neonaqua':'180, 100%, 56%',
+		'dildopurple':'275, 82%, 17%',
+		'orange':'16, 74%, 50%'
 	}
 	var GOLDENRATIO = 1.618;
 	var colors = [];
