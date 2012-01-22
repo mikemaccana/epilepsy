@@ -19,11 +19,10 @@ $( function() {
 	
 	function maketexteffects(title) {
 		// Set the text effects on a JQ selector named title then show it
-		titlearea.text(title);
 		var font = getrandomfont();
 		var color = getrandomcolor();
 		var css = {
-			'font-size': '60pt',
+			'font-size': '120pt',
 			'font-family': font,
 			'color':color
 		}
@@ -56,13 +55,20 @@ $( function() {
 		};
 		
 		effect_to_apply = pickRandomProperty(effects)	
+		console.log('effect_to_apply')
+		console.log(effect_to_apply)
+		console.log(css)
 		effects[effect_to_apply]()
 		// For individual letters
 		// Adjust colors 
 		// Adjust sizes
-			
-		// effects.rotate()
-		titlearea.css(css)
+
+		newtitle = $('<h1></h1>')
+		newtitle.text(title);
+		newtitle.css(css)
+		
+
+		$('h1').replaceWith(newtitle);
 	}
 
 	function showcredits(titles, fonts, interval) {
@@ -160,7 +166,6 @@ $( function() {
 	    'SeasideResortNFRegular'
 	];
 	var fontslength = fonts.length;
-	var titlearea = $('h1');
 	var colortable = {
 		'etvred':'#6d0111',
 		'etvyellow':'#d07a2d',
@@ -190,7 +195,6 @@ $( function() {
 	var BPM = 135;
 	
 	var interval = 60 / BPM * 1000;
-		
 	showcredits(titles, fonts, interval);
 })
 
