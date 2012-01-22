@@ -6,7 +6,7 @@
 
 Run static/epilepsy.html in your favorite browser
 
-### Credit
+### Credits
 
  - Epilepsy was written by Mike MacCana
  - The original Enter the Void credit sequence was created by Tom Kan

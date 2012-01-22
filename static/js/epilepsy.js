@@ -10,10 +10,10 @@ $( function() {
 	function maketexteffects(title) {
 		// Set the text effetcs on a JQ selector named title then show it
 		titlearea.text(title);
-		var fontname = fonts[Math.floor ( Math.random() * fontslength )];
-		var color = colors[Math.floor ( Math.random() * colorslength )]; 
+		var font = getrandomfont();
+		var color = getrandomcolor();
 		titlearea.css({
-			'font': '60px/68px '+fontname,
+			'font-family': font,
 			'letter-spacing': '0',
 			'color':color
 		})
@@ -34,8 +34,71 @@ $( function() {
 		}, interval);
 	}
 
-	var words = "Cred aesthetic food truck next level, letterpress hoodie before they sold out tattooed readymade shoreditch high life ethical banh mi butcher. Carles viral mcsweeney's mlkshk. Put a bird on it farm-to-table tofu biodiesel, raw denim fixie aesthetic sustainable. Leggings iphone put a bird on it retro, wayfarers cliche marfa scenester. Tofu etsy leggings, viral mustache carles 8-bit quinoa mcsweeney's DIY fixie. Marfa biodiesel gluten-free quinoa cardigan wes anderson. Master cleanse food truck you probably haven't heard of them, iphone PBR Austin blog irony shoreditch keytar vinyl brooklyn wes anderson cardigan american apparel.";
-	var titles = words.split(' ');
+	var titles = [
+		"Cred", 
+		"aesthetic",
+		"food truck",
+        "next level",
+        "letterpress",
+        "hoodie",
+        "before they sold out",
+        "tattooed",
+        "readymade",
+        "shoreditch",
+        "high life",
+        "ethical",
+        "banh mi",
+        "butcher",
+        "viral",
+        "mcsweeney's",
+        "mlkshk",
+        "Put a bird on it",
+        "farm-to-table",
+        "tofu",
+        "biodiesel",
+        "raw denim",
+        "fixie",
+        "aesthetic",
+        "sustainable. Leggings",
+        "iphone",
+        "put a bird on it ,retro",
+        "wayfarers",
+        "cliche",
+        "marfa",
+        "scenester",
+        "Tofu",
+        "etsy",
+        "leggings",
+        "viral",
+        "mustache",
+		"carles",
+        "8-bit",
+        "quinoa",
+        "mcsweeney's",
+        "DIY",
+        "fixie",
+        "Marfa",
+        "biodiesel",
+        "gluten-free",
+        "quinoa",
+        "cardigan",
+        "wes anderson",
+		"Master cleanse",
+        "food truck",
+        "you probably haven't heard of them",
+        "iphone",
+        "PBR",
+        "Austin",
+        "blog",
+        "irony",
+        "shoreditch",
+        "keytar",
+        "vinyl",
+        "brooklyn",
+        "wes anderson",
+        "cardigan ",
+		"american apparel."
+	];
 	var fonts = [
 	    'BallparkWeiner',
 	    'AirstreamRegular',
@@ -51,9 +114,31 @@ $( function() {
 	    'SeasideResortNFRegular'
 	];
 	var fontslength = fonts.length;
-	var titlearea = $('h1')
-	var colors = ["whiteSmoke","blue","red"];
+	var titlearea = $('h1');
+	var colortable = {
+		'etvred':'#6d0111',
+		'etvyellow':'#d07a2d',
+		'darkgreen':'#286e28',
+		'purple':'#4b1759',
+		'sexypink':'#d3969e',
+		'pink':'#cc0082',
+		'green':'#00a701',
+		'blue':'#0000e1',
+		'neonaqua':'#1fffff',
+		'dildopurple':'#320850',
+		'orange':'#de5423'
+	}
+	var colors = [];
+	for ( colorname in colortable) {
+		colors.push(colortable[colorname])
+	}
 	var colorslength = colors.length;
+	
+	
+	var getrandomfont = function() {return fonts[Math.floor ( Math.random() * fontslength )] };
+	var getrandomcolor = function() {return colors[Math.floor ( Math.random() * colorslength )] }; 
+	// var size = 
+	
 
 	addmusic();
 	
