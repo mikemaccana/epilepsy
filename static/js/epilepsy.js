@@ -17,9 +17,14 @@ $( function() {
 	    return result;
 	}
 	
+	function get_random_num(max) {
+		// Return a random number between 0 and max
+		return Math.floor(Math.random() * max);
+	}
+	
 	function vary_around_zero(variance) {
 		// Return a random number in the range of +-variance
-		return Math.floor( Math.random() * (variance*2) ) - variance; 
+		return get_random_num(variance*2) - variance; 
 	}
 	
 	function lighten_or_darken_color(hsl_color, amount) {
@@ -29,7 +34,7 @@ $( function() {
 		saturation = bits[1]
 		lightness = parseFloat(bits[2])
 		lightness += amount;
-		lightness == lightness || 1
+		lightness == lightness || 20 // min lightness
 		lightness = lightness+'%'
 		newcolor = [hue, saturation, lightness].join(',')
 		console.log('newcolor:');
@@ -40,12 +45,14 @@ $( function() {
 	function maketexteffects(title) {
 		// Set the text effects on a JQ selector named title then show it
 		var font = getrandomfont();
+		var fontsize = 130 + get_random_num(70)
 		var color = getrandomcolor();
 		var css = {
-			'font-size': '120pt',
+			'font-size': fontsize+'pt',
 			'font-family': font,
 			'color':'hsl('+color+')',
 			'text-align':'center',
+			'padding':'20px' // Ensure enough room for the letters
 		}
 		css['margin-left'] = vary_around_zero(200);
 		css['margin-top'] = vary_around_zero(200);
@@ -57,7 +64,7 @@ $( function() {
 			},
 			texture: function() {
 				// Add a texture to the text
-				css['background'] = 'url(/static/img/paint.png) repeat, white'
+				css['background'] = 'url(/images/colorful-pencils-HD_wallpapers.jpg) repeat, white'
 				css['-webkit-text-fill-color'] = 'transparent'
 				css['-webkit-background-clip'] = 'text'
 			},
@@ -76,10 +83,15 @@ $( function() {
 				console.log('shadow');
 				console.log(css['text-shadow']);
 			},	
-			textoutline: function() {
-				// Add an outline to the text 
+			outline: function() {
+				// Make the text a black outline 
 				css['-webkit-text-stroke'] = '1px hsl('+color+')';
 				css['-webkit-text-fill-color'] = 'transparent';
+			},
+			coloroutline: function() {
+				// Add an outline to the text 
+				var newcolor = getrandomcolor();
+				css['-webkit-text-stroke'] = '1px hsl('+newcolor+')';
 			},
 			bordertopbottom: function () {
 				// Add a border
@@ -90,17 +102,22 @@ $( function() {
 				// Add a border
 				css['border'] = '1px solid hsl('+color+')'
 			},
-			
 			rotate: function () {
 				// Rotate a little
-				css['-webkit-transform'] = 'rotate(-3deg)'
+				var rotation = vary_around_zero(5)
+				css['-webkit-transform'] = 'rotate(-'+rotation+'deg)'
+			},
+			italic: function () {
+				// Ronseal
+				css['font-style'] = 'italic';
 			}
+			
 		};
 		
-		effect_to_apply = pickRandomProperty(effects)	
-		console.log('effect_to_apply')
-		console.log(effect_to_apply)
-		console.log(css)
+		effect_to_apply = pickRandomProperty(effects);	
+		effects[effect_to_apply]()
+		
+		effect_to_apply = pickRandomProperty(effects);	
 		effects[effect_to_apply]()
 		// For individual letters
 		// Adjust colors 
@@ -114,7 +131,7 @@ $( function() {
 		$('h1').replaceWith(newtitle);
 	}
 
-	function showcredits(titles, fonts, interval) {
+	function show_credits(titles, fonts, milliseconds) {
 		// Show some 'Enter the Void' style titles 
 		console.log('Starting credits');
 		var count = 0
@@ -125,8 +142,9 @@ $( function() {
 			if ( count >= titles.length) { 
 				clearInterval(interval); 
 				audio.pause();
+				done = true;
 			}
-		}, interval);
+		}, milliseconds);
 	}
 
 	var titles = [
@@ -214,18 +232,17 @@ $( function() {
 	    "artisan",
 	    "hoodie"
 	];
+	
+	//var titles = ['test'];
 
 	var fonts = [
 	    'BallparkWeiner',
-	    'AirstreamRegular',
 	    'BebasRegular',
-	    'FontleroyBrownRegular',
 	    'Lobster13Regular',
 	    'MolotRegular',
 	    'NeoRetroDrawRegular',
 	    'NeoRetroFillRegular',
 	    'NeoRetroShadowRegular',
-	    'PacificoRegular',
 	    'PincoyablackBlack',
 	    'SeasideResortNFRegular'
 	];
@@ -244,6 +261,9 @@ $( function() {
 		'orange':'16, 74%, 50%'
 	}
 	var GOLDENRATIO = 1.618;
+	
+	var done = false;
+	
 	var colors = [];
 	for ( colorname in colortable) {
 		colors.push(colortable[colorname])
@@ -251,14 +271,39 @@ $( function() {
 	var colorslength = colors.length;
 	
 	
-	var getrandomfont = function() {return fonts[Math.floor ( Math.random() * fontslength )] };
-	var getrandomcolor = function() {return colors[Math.floor ( Math.random() * colorslength )] }; 
+	var getrandomfont = function() {return fonts[get_random_num(fontslength)] };
+	var getrandomcolor = function() {return colors[get_random_num(colorslength)] }; 
 
 	addmusic();
 	
 	var BPM = 135;
+	var beatspertitle = 1				;
+	var interval = 60 / BPM * 1000 * beatspertitle;
+	//svar interval = 4000;
+	var flash_like_a_motherfucker = function(milliseconds) {
+		// Flash the shade opacity every few milliseconds
+		$shade = $('#shade')
+		var currentshadestate = 0
+		var shadestates = ['0', '0.5', '1.0']
+		var shadestateslength = shadestates.length
+		var interval = setInterval( function() { 
+			if ( currentshadestate > shadestateslength ) {
+				currentshadestate = 0
+			} else {
+				currentshadestate += 1
+			}
+			$shade.css({
+				'opacity':currentshadestate
+			})
+			if ( done ) { 
+				clearInterval(interval); 
+			}
+		}, milliseconds);
+			
+	}
 	
-	var interval = 60 / BPM * 1000;
-	showcredits(titles, fonts, interval);
+	flash_like_a_motherfucker(50)	
+	show_credits(titles, fonts, interval);	
+	
 })
 
